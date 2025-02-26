@@ -186,10 +186,48 @@
                 </p>
               </div>
               <div class="card-footer">
-                <a href="#" class="btn btn-primary">Generate Now</a>
+                <a href="#" class="btn btn-primary" id="openSpectrogramModal"
+                  >Generate Now</a
+                >
               </div>
             </div>
           </div>
+
+          <div id="spectrogramModal" class="custom-modal">
+            <div class="custom-modal-content">
+              <span class="close">&times;</span>
+              <h2 class="text-center">Generate Spectrogram</h2>
+              <p class="text-center">
+                Upload a .wav file to generate a detailed spectrogram for
+                analysis.
+              </p>
+
+              <div class="upload-container p-4 text-center">
+                <form id="spectrogramForm" enctype="multipart/form-data">
+                  <div class="form-group">
+                    <label for="wavFile" class="form-label"
+                      >Choose a WAV file:</label
+                    >
+                    <input
+                      type="file"
+                      class="form-control form-control-lg"
+                      id="wavFile"
+                      name="wavFile"
+                      accept="audio/wav"
+                      required
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    class="btn btn-success btn-lg btn-block"
+                  >
+                    Generate Spectrogram
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
           <div class="col-lg-4 mb-4">
             <div class="card h-100">
               <h4 class="card-header">Prediction System</h4>
@@ -378,94 +416,7 @@
         });
       });
     </script>
-    <!-- 
-    <script>
-      document
-        .querySelector("form")
-        .addEventListener("submit", async function (event) {
-          event.preventDefault(); // Prevent form from reloading the page
 
-          const fileInput = document.getElementById("birdAudio");
-          if (!fileInput.files.length) {
-            alert("Please select a file before converting.");
-            return;
-          }
-
-          let formData = new FormData();
-          formData.append("audio", fileInput.files[0]); // Ensure the name matches backend
-
-          try {
-            const response = await fetch("http://127.0.0.1:5000/convert", {
-              method: "POST",
-              body: formData,
-            });
-
-            if (!response.ok) {
-              throw new Error(`Server error: ${response.statusText}`);
-            }
-
-            // Get the converted file as a blob and download it
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "converted.wav"; // Auto-download file
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-          } catch (error) {
-            console.error("Error:", error);
-            alert("An error occurred while converting the file.");
-          }
-        });
-    </script> -->
-    <!-- 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector("form");
-
-        form.addEventListener("submit", async function (event) {
-          event.preventDefault();
-
-          const formData = new FormData();
-          const fileInput = document.getElementById("birdAudio");
-          const file = fileInput.files[0];
-
-          if (!file) {
-            alert("Please select a file.");
-            return;
-          }
-
-          formData.append("audio", file);
-
-          try {
-            const response = await fetch("http://127.0.0.1:5000/convert", {
-              method: "POST",
-              body: formData,
-            });
-
-            if (!response.ok) {
-              throw new Error(`Server error: ${response.status}`);
-            }
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "converted.wav";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-
-            alert("File converted successfully!");
-          } catch (error) {
-            alert("An error occurred while converting the file.");
-            console.error("Error:", error);
-          }
-        });
-      });
-    </script> -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form");
@@ -510,6 +461,84 @@
             alert("File converted successfully!");
           } catch (error) {
             alert("An error occurred while converting the file.");
+            console.error("Error:", error);
+          }
+        });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const openSpectrogramModalBtn = document.getElementById(
+          "openSpectrogramModal"
+        );
+        const spectrogramModal = document.getElementById("spectrogramModal");
+        const closeSpectrogramModalBtn =
+          spectrogramModal.querySelector(".close");
+
+        // Initially hide the modal
+        spectrogramModal.style.display = "none";
+
+        openSpectrogramModalBtn.addEventListener("click", function (event) {
+          event.preventDefault();
+          spectrogramModal.style.display = "flex";
+        });
+
+        closeSpectrogramModalBtn.addEventListener("click", function () {
+          spectrogramModal.style.display = "none";
+        });
+
+        window.addEventListener("click", function (event) {
+          if (event.target === spectrogramModal) {
+            spectrogramModal.style.display = "none";
+          }
+        });
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const spectrogramForm = document.getElementById("spectrogramForm");
+
+        spectrogramForm.addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const fileInput = document.getElementById("wavFile");
+          const file = fileInput.files[0];
+
+          if (!file) {
+            alert("Please select a WAV file.");
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("wavFile", file);
+
+          try {
+            const response = await fetch("http://127.0.0.1:5000/spectrogram", {
+              method: "POST",
+              body: formData,
+              headers: {
+                Accept: "image/png",
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Server error: ${response.status}`);
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "spectrogram.png";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            alert("Spectrogram generated successfully!");
+          } catch (error) {
+            alert("An error occurred while generating the spectrogram.");
             console.error("Error:", error);
           }
         });
