@@ -6,7 +6,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import os
 
 # Path to Service Account JSON Key
-CREDS_FILE = os.path.join(os.path.dirname(__file__), "birdrecognition-453108-a51a8718ceee.json")
+CREDS_FILE = os.path.join(os.path.dirname(__file__), "birdrecognition-453108-104136d02cca.json")
 SHEET_ID = "1-JaaQ-4hNawlJwdHQ9u-HxguSB_C6wJpY0vVQtDYad0"  # Make sure this is correct
 
 

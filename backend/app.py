@@ -116,7 +116,7 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # Load Google Sheets API credentials
-CREDS_FILE = os.path.join(os.path.dirname(__file__), "birdrecognition-453108-a51a8718ceee.json")
+CREDS_FILE = os.path.join(os.path.dirname(__file__), "birdrecognition-453108-104136d02cca.json")
 SHEET_ID = "1-JaaQ-4hNawlJwdHQ9u-HxguSB_C6wJpY0vVQtDYad0"  # Use correct Google Sheet ID
 
 # Check if credentials file exists
