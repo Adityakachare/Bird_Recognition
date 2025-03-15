@@ -8,22 +8,42 @@ from create_spectogram import generate_spectrogram
 import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
-
+from dotenv import load_dotenv
+load_dotenv()
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+
+SHEET_ID = os.getenv("GOOGLE_SHEET_ID")
+
+creds_data = {
+    "type": os.getenv("TYPE"),
+    "project_id": os.getenv("PROJECT_ID"),
+    "private_key_id": os.getenv("PRIVATE_KEY_ID"),
+    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),
+    "client_email": os.getenv("CLIENT_EMAIL"),
+    "client_id": os.getenv("CLIENT_ID"),
+    "auth_uri": os.getenv("AUTH_URI"),
+    "token_uri": os.getenv("TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.getenv("AUTH_PROVIDER_X509_CERT_URL"),
+    "client_x509_cert_url": os.getenv("CLIENT_X509_CERT_URL"),
+    "universe_domain": os.getenv("UNIVERSE_DOMAIN"),
+}
+
+
 # Load Google Sheets API credentials
-CREDS_FILE = os.path.join(os.path.dirname(__file__), "birdrecognition-453108-21da8866b832.json")
-SHEET_ID = "1-JaaQ-4hNawlJwdHQ9u-HxguSB_C6wJpY0vVQtDYad0"  # Use correct Google Sheet ID
+#CREDS_FILE = os.path.join(os.path.dirname(__file__), "birdrecognition-453108-21da8866b832.json")
+#SHEET_ID = "1-JaaQ-4hNawlJwdHQ9u-HxguSB_C6wJpY0vVQtDYad0"  # Use correct Google Sheet ID
 
 # Check if credentials file exists
-if not os.path.exists(CREDS_FILE):
-    print(f"❌ Error: Credentials file '{CREDS_FILE}' not found!")
-    exit(1)
+# if not os.path.exists(CREDS_FILE):
+#     print(f"❌ Error: Credentials file '{CREDS_FILE}' not found!")
+#     exit(1)
 
 # Google Sheets API setup
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name(CREDS_FILE, scope)
+# creds = ServiceAccountCredentials.from_json_keyfile_name(CREDS_FILE, scope)
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_data, scope)
 client = gspread.authorize(creds)
 
 # Open Google Sheet safely

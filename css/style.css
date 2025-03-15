@@ -733,3 +733,123 @@ footer p {
 	from { opacity: 0; transform: scale(0.9); }
 	to { opacity: 1; transform: scale(1); }
 }
+/* 
+.container {
+	margin-top: 20px;
+  }
+  
+  .card {
+	border: 1px solid #ddd;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease;
+	cursor: pointer;
+  }
+  
+  .card:hover {
+	transform: translateY(-5px);
+  }
+  
+  .card-title {
+	color: #2a5d67;
+	font-weight: bold;
+	text-align: center;
+  }
+  
+  .card img {
+	height: 200px;
+	object-fit: cover;
+	border-bottom: 1px solid #ddd;
+  }
+  
+
+  
+#letters-navigation button {
+	color: #28a745 !important; 
+	border-color: #28a745 !important;
+	background-color: transparent;
+	transition: 0.3s ease;
+	font-weight: bold;
+  }
+  
+  
+  #letters-navigation button:hover,
+  #letters-navigation button.active {
+	background-color: #28a745 !important;
+	color: #fff !important;
+  }
+  
+  
+  h1,
+  h4,
+  p strong {
+	color: inherit; 
+  }
+  
+  
+  .navbar-dark .navbar-nav .nav-link,
+  .footer_ul_amrc a,
+  .footer_ul2_amrc a,
+  .social_footer_ul li a {
+	color: inherit !important;
+  }
+   */
+   /* Unique Container Styling */
+.bird-recordings-container {
+	margin-top: 20px;
+  }
+  
+  /* Unique Card Styling */
+  .bird-card {
+	border: 1px solid #ddd;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease;
+	cursor: pointer;
+  }
+  
+  .bird-card:hover {
+	transform: translateY(-5px);
+  }
+  
+  .bird-card-title {
+	color: #2a5d67;
+	font-weight: bold;
+	text-align: center;
+  }
+  
+  .bird-card img {
+	height: 200px;
+	object-fit: cover;
+	border-bottom: 1px solid #ddd;
+  }
+  
+  /* Unique Letters Navigation Styling */
+  #bird-letters-navigation button {
+	color: #28a745 !important;
+	border-color: #28a745 !important;
+	background-color: transparent;
+	transition: 0.3s ease;
+	font-weight: bold;
+  }
+  
+  /* Button hover effect */
+  #bird-letters-navigation button:hover,
+  #bird-letters-navigation button.active {
+	background-color: #28a745 !important;
+	color: #fff !important;
+  }
+  
+  /* Reset default element styles to avoid overrides */
+  h1,
+  h4,
+  p strong {
+	color: inherit;
+  }
+  
+  /* Ensure navbar, footer, and social links remain untouched */
+  .navbar-dark .navbar-nav .nav-link,
+  .footer_ul_amrc a,
+  .footer_ul2_amrc a,
+  .social_footer_ul li a {
+	color: inherit !important;
+  }
+  
