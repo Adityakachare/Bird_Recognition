@@ -215,7 +215,12 @@
         <div class="row justify-content-center">
           <div class="col-lg-10">
             <div class="upload-container p-5 text-center">
-              <form id="uploadForm" enctype="multipart/form-data">
+              <form
+                id="uploadForm"
+                enctype="multipart/form-data"
+                action="/predict"
+                method="POST"
+              >
                 <div class="form-group">
                   <label for="birdAudio" class="form-label"
                     >Choose an audio file:</label
@@ -223,8 +228,8 @@
                   <input
                     type="file"
                     class="form-control form-control-lg"
-                    id="birdAudio"
-                    name="birdAudio"
+                    id="fileInput"
+                    name="fileInput"
                     accept="audio/*"
                     required
                   />
@@ -449,24 +454,30 @@
       });
     </script>
 
-    <!-- <script>
+    <script>
       document
         .getElementById("uploadForm")
         .addEventListener("submit", async (e) => {
           e.preventDefault(); // Prevent page reload
 
           const formData = new FormData();
-          const fileInput = document.getElementById("birdAudio");
+          const fileInput = document.getElementById("fileInput");
           const loadingSpinner = document.getElementById("loading");
           const resultDiv = document.getElementById("result");
           const errorDiv = document.getElementById("error");
+          const birdName = document.getElementById("birdName");
+          const birdInfo = document.getElementById("birdInfo");
+          const birdImage = document.getElementById("birdImage");
 
           if (fileInput.files.length === 0) {
             alert("Please select an audio file!");
             return;
           }
 
-          formData.append("birdAudio", fileInput.files[0]);
+          //formData.append("file", fileInput.files[0]);
+
+          formData.append("birdAudio", fileInput.files[0]); // ✅ Correct key and file
+          const file = fileInput.files[0]; // ✅ Ensure this gets the first file
 
           // Show loading spinner
           loadingSpinner.style.display = "block";
@@ -474,7 +485,6 @@
           errorDiv.style.display = "none";
 
           try {
-            // ✅ Make the fetch call to the Flask backend
             const response = await fetch("http://127.0.0.1:5000/predict", {
               method: "POST",
               body: formData,
@@ -482,83 +492,29 @@
 
             const data = await response.json();
 
+            // Hide spinner
             loadingSpinner.style.display = "none";
 
-            if (response.ok && data.bird_species) {
-              // Show result
+            if (response.ok) {
+              // Show prediction result
+              birdName.textContent = data.bird_species || "Unknown Bird";
+              birdInfo.textContent =
+                data.description || "No additional information available.";
+              birdImage.src = data.image_url || "images/default-bird.jpg";
+              birdImage.alt = data.bird_species || "Bird Image";
               resultDiv.style.display = "block";
-              document.getElementById("birdName").textContent =
-                data.bird_species;
-              document.getElementById("birdInfo").textContent =
-                "Bird species identified successfully!";
-              document.getElementById(
-                "birdImage"
-              ).src = `/static/bird_images/${data.bird_species.replace(
-                " ",
-                "_"
-              )}.jpg`; // Assuming you have bird images
             } else {
-              throw new Error(data.error || "Failed to identify bird.");
+              errorDiv.textContent =
+                data.error || "Failed to recognize the bird.";
+              errorDiv.style.display = "block";
             }
           } catch (error) {
-            console.error("Error:", error);
             loadingSpinner.style.display = "none";
+            errorDiv.textContent =
+              "An error occurred while processing the audio.";
             errorDiv.style.display = "block";
-            errorDiv.textContent = `❗ ${error.message}`;
-          }
-        });
-    </script> -->
-    <script>
-      document
-        .getElementById("uploadForm")
-        .addEventListener("submit", async (event) => {
-          event.preventDefault();
-
-          const formData = new FormData();
-          const fileInput = document.getElementById("birdAudio");
-          const file = fileInput.files[0];
-
-          if (!file) {
-            alert("Please upload an audio file!");
-            return;
-          }
-
-          formData.append("birdAudio", file);
-
-          // Show loading spinner
-          document.getElementById("loading").style.display = "block";
-          document.getElementById("result").style.display = "none";
-          document.getElementById("error").style.display = "none";
-
-          try {
-            const response = await fetch("http://localhost:5000/predict", {
-              method: "POST",
-              body: formData,
-            });
-
-            const data = await response.json();
-
-            if (data.error) {
-              throw new Error(data.error);
-            }
-
-            // Hide loading spinner
-            document.getElementById("loading").style.display = "none";
-            document.getElementById("result").style.display = "block";
-
-            // Populate bird data
-            document.getElementById("birdName").innerText = data.bird_name;
-            document.getElementById("birdInfo").innerText = data.bird_info;
-            document.getElementById("birdImage").src = data.bird_image;
-          } catch (error) {
-            document.getElementById("loading").style.display = "none";
-            document.getElementById(
-              "error"
-            ).innerText = `Error: ${error.message}`;
-            document.getElementById("error").style.display = "block";
           }
         });
     </script>
-
-</body>
+  </body>
 </html>

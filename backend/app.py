@@ -141,7 +141,7 @@ def generate_spectrogram_route():
 @cross_origin()
 def bird_prediction():
     try:
-        audio_file = request.files.get("birdAudio")
+        audio_file = request.files.get("fileInput")
         if not audio_file:
             return jsonify({"error": "No audio file uploaded"}), 400
 
