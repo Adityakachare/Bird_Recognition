@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "birdrecognition-453108",
+  "private_key_id": "21da8866b8324c3690900af37ae0e17512c8f520",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCh/UED5IjGFWJh\nPG2jKlFNBuoDkDeRwrtVkTsiVSQ1Lb9pXbmBb9E3JSuqwBrosGbyULNSjwqW6eyj\nleNJ4YlkqUp0Lt5sl+Elp8sZbkB2ajhCdAwsf1LBfn91HEe+yGY7R9nNj9FB5KD1\n6vJ8aqY/UH8m1FuCFUtiAYqyPmwRg0U9IXRThkywUcHBmPRSeFOIss5Dyk0N2QCP\nEvC5TCY/zP+fHDfNsGI8TRewkHIj5ZhZiIar5idonxOJwLnqBpgOLcj00Gy9vv8a\nzi3luyrY3063+ltmyQW9+jR7f/whEE4GY2/Je+DLFUjKhMmNh40grV8BZkghbEqR\n0/+JPKOPAgMBAAECggEADgVxITh2K58iOtm+K7INWNDRD1SRBXQzlD5+ky7cyXWX\nlzPeS2PgWhjvj1doJ4f4ATVsWtMNeZlEkGGi9ibS0Pxjo2wtzdHU/Stpmwk+BIHr\n3g9UFm3sPdoIh5yBC/R7VNpCnKu8KICfphRGFPAuSlYEti8KFK0UhKaELirVCSw5\nA5+l1ZbGn0Mv/HHpbeAAoL4W927t3NsidwopqTG66K3NbbfX6xh4JcB+H50RptVn\nNr05jW69e3G6H+9eUOtP/+AzTK7RYvDpyCJSZNQAiUEx71o3mq7xSwT2ZAeVIkRc\nAlh+MxwbnMrm5xQ98JfVxHEiPMxRq3Bh9TQESQBrUQKBgQDUI+y9LsPzO7ipQpaP\nfa3UNET6Gvulv/vp/evGTg2q+UT5QfwrKuYM460rbL8MvkFhjSrTikKgv+wa+Jks\nGLxM3B+Fy3Lgs60G9iVMywQ3NIcE/16sCVbBICBJHKZUZI5wqYxXYD+BnOyuGPlq\nfKtAKg80GfIvuObExvEJFHN12wKBgQDDevRyT8jO8FHEH0A50XJxk7orZk6rlgZG\nskd570IG6lD+O26PQZDQPJYADntxrSr/CvweTCMEtcrCGM3bXaCJz4QGeAEezwdB\nmHSJSs3QxqehdOiC09bgQIsucnektFjI/irrexfI847wlt3pLqAkk2Ji9P9ASGrs\nhiv5VBxpXQKBgAy5durGElTVoTbt2pASzslqtTR3R97iTB717x1+8wztVLjKv3Br\na08cnPd811zRUKSkTgxQP7zapjPb83wUo77MeUuSL3rQ7DD9tLENgFw7V1nyY2BY\nUw7UeXtJL6TiPzT8xoE7MbP5kKzErLk5byAzJaRPZhp8scLd1/lec6p/AoGAMjAN\nNpQZYFf/BjVnzfBiS5q7/4yCwjcAYYJAK6Qr9Y6PQNaNaiZRQcVsVZNiSitFkLmH\nRVgS3ZC2/+JSZ/G/1+H5aZfB4eERYdv8f4s/EE0QmLllQMGWt3iaw1AMO7M54FCx\nQEgYMTWnC0oQq1+XKgzVA8cXCbAOE6/W9mqL6NkCgYBF4+/sffKhtcHUebv3+zyf\nVu50A+dujAMdaaUhT2/2dUmDLxkOkBdlUW3twESMgtcy6l4e3bF+corOX/rbIP7/\n1a8aaOvCi3bqYWgdRAPYeU2+uvDUS54NqDS4SEfYA/Y5XVr0lX9NCayGAxPGIqfl\n3DYXSSztswrA/6axItFuqw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "bird-recognition-api@birdrecognition-453108.iam.gserviceaccount.com",
+  "client_id": "108868732114720892116",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bird-recognition-api%40birdrecognition-453108.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
