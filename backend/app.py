@@ -31,14 +31,6 @@ creds_data = {
 }
 
 
-# Load Google Sheets API credentials
-#CREDS_FILE = os.path.join(os.path.dirname(__file__), "birdrecognition-453108-21da8866b832.json")
-#SHEET_ID = "1-JaaQ-4hNawlJwdHQ9u-HxguSB_C6wJpY0vVQtDYad0"  # Use correct Google Sheet ID
-
-# Check if credentials file exists
-# if not os.path.exists(CREDS_FILE):
-#     print(f"❌ Error: Credentials file '{CREDS_FILE}' not found!")
-#     exit(1)
 
 # Google Sheets API setup
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -54,25 +46,7 @@ except Exception as e:
     print(f"❌ Google Sheets API Error: {e}")
     spreadsheet = None  # Avoid crashes if API fails
 
-# Route to Fetch Bird Data
-# @app.route("/birds", methods=["GET"])
-# @cross_origin()
-# def get_bird_data():
-#     if not spreadsheet:
-#         return jsonify({"error": "Unable to connect to Google Sheets"}), 500
 
-#     all_data = {}
-
-#     try:
-#         for sheet in spreadsheet.worksheets():
-#             records = sheet.get_all_records()
-#             df = pd.DataFrame(records) if records else pd.DataFrame(columns=["No data available"])
-#             all_data[sheet.title] = df.to_dict(orient="records")
-
-#         return jsonify(all_data)
-
-#     except Exception as e:
-#         return jsonify({"error": f"Failed to fetch data: {str(e)}"}), 500
 # Route to Fetch Bird Data
 @app.route("/birds", methods=["GET"])
 @cross_origin()
