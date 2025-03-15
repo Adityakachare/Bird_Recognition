@@ -1,14 +1,19 @@
+
 from flask import Flask, request, send_file, jsonify
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS, cross_origin
 import os
-from convert_audio import convert_to_wav
-from werkzeug.utils import secure_filename
-from flask_cors import cross_origin
-from create_spectogram import generate_spectrogram
 import gspread
 import pandas as pd
-from oauth2client.service_account import ServiceAccountCredentials
+from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
+from oauth2client.service_account import ServiceAccountCredentials
+
+# Custom imports
+from convert_audio import convert_to_wav
+from create_spectogram import generate_spectrogram
+from prediction import predict_bird
+
+
 load_dotenv()
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -131,6 +136,40 @@ def generate_spectrogram_route():
         download_name=f"{filename.rsplit('.', 1)[0]}_spectrogram.png"
     )
 
+# Bird Species Prediction Route
+@app.route("/predict", methods=["POST"])
+@cross_origin()
+def bird_prediction():
+    try:
+        audio_file = request.files.get("birdAudio")
+        if not audio_file:
+            return jsonify({"error": "No audio file uploaded"}), 400
+
+        # Save the audio to a temporary file
+        temp_audio_path = "temp_audio.wav"
+        audio_file.save(temp_audio_path)
+
+        # Fetch bird names from the first worksheet in Google Sheets
+        bird_names = [
+            row.get("bird name", "Unknown bird")
+            for row in spreadsheet.get_worksheet(0).get_all_records()
+        ]
+
+        # Call the prediction function, passing the **file path** instead of file object
+        prediction_result = predict_bird(temp_audio_path, bird_names)
+
+        if "error" in prediction_result:
+            return jsonify({"error": prediction_result["error"]}), 500
+
+        return jsonify({"bird_species": prediction_result["bird_species"]})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        # Ensure temp file gets removed after processing
+        if os.path.exists("temp_audio.wav"):
+            os.remove("temp_audio.wav")
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
