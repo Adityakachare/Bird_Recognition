@@ -52,6 +52,9 @@ def generate_spectrogram(audio_file_path):
 
         # Convert buffer to PIL Image for model prediction
         spectrogram_img = Image.open(img_buffer).convert("RGB")
+
+        print("Spectrogram generated, image size:", spectrogram_img.size)  # Debugging line
+        
         return spectrogram_img
 
     except Exception as e:
@@ -81,6 +84,8 @@ def predict_bird(audio_file_path, bird_names):
 
         if spectrogram_img is None:
             return {"error": "Failed to generate spectrogram"}
+        
+        spectrogram_img.show()
 
         # ✅ Preprocess the spectrogram image
         input_tensor = preprocess_image(spectrogram_img)

@@ -51,6 +51,8 @@ except Exception as e:
     print(f"❌ Google Sheets API Error: {e}")
     spreadsheet = None  # Avoid crashes if API fails
 
+app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024  # 50MB limit
+
 
 # Route to Fetch Bird Data
 @app.route("/birds", methods=["GET"])
@@ -73,6 +75,12 @@ def get_bird_data():
                     filtered_records.append(cleaned_record)
 
             all_data[sheet.title] = filtered_records
+
+            bird_names = [
+            row.get("bird name", "Unknown bird")
+            for row in spreadsheet.get_worksheet(0).get_all_records()
+        ]
+        print("Bird names fetched:", bird_names)  # Debugging line
 
         return jsonify(all_data)
 
@@ -141,9 +149,17 @@ def generate_spectrogram_route():
 @cross_origin()
 def bird_prediction():
     try:
-        audio_file = request.files.get("fileInput")
-        if not audio_file:
-            return jsonify({"error": "No audio file uploaded"}), 400
+        # audio_file = request.files.get("fileInput")
+        # if not audio_file:
+        #     return jsonify({"error": "No audio file uploaded"}), 400
+        if "fileInput" not in request.files:
+            return jsonify({"error": "No file received by server"}), 400
+
+        audio_file = request.files["fileInput"]
+
+        if audio_file.filename == "":
+            return jsonify({"error": "No file selected"}), 400
+
 
         # Save the audio to a temporary file
         temp_audio_path = "temp_audio.wav"

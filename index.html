@@ -206,7 +206,7 @@
         <!-- /.row -->
       </div>
 
-      <div id="upload-section" class="upload-audio-section my-5">
+      <!-- <div id="upload-section" class="upload-audio-section my-5">
         <h2 class="text-center">Upload Your Recording to Recognize the Bird</h2>
         <p class="text-center">
           Share your bird sound recordings and let our advanced recognition
@@ -215,12 +215,7 @@
         <div class="row justify-content-center">
           <div class="col-lg-10">
             <div class="upload-container p-5 text-center">
-              <form
-                id="uploadForm"
-                enctype="multipart/form-data"
-                action="/predict"
-                method="POST"
-              >
+              <form id="uploadForm" enctype="multipart/form-data" method="POST">
                 <div class="form-group">
                   <label for="birdAudio" class="form-label"
                     >Choose an audio file:</label
@@ -238,6 +233,73 @@
                   Upload Recording
                 </button>
               </form>
+
+              
+              <div id="loading" style="display: none; margin-top: 20px">
+                <div class="spinner-border text-success" role="status">
+                  <span class="visually-hidden">Analyzing...</span>
+                </div>
+                <p>Analyzing the audio... Please wait!</p>
+              </div>
+
+              
+              <div id="result" class="mt-4" style="display: none">
+                <h3 class="text-success">🎉 Bird Identified:</h3>
+                <h4 id="birdName" class="fw-bold"></h4>
+                <p id="birdInfo" class="text-muted"></p>
+                <img
+                  id="birdImage"
+                  src=""
+                  class="img-fluid rounded mt-3"
+                  alt="Bird Image"
+                  style="max-width: 300px"
+                />
+              </div>
+
+              
+              <div
+                id="error"
+                class="mt-4 text-danger"
+                style="display: none"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- The upload form section -->
+      <!-- The upload form section -->
+      <div id="upload-section" class="upload-audio-section my-5">
+        <h2 class="text-center">Upload Your Recording to Recognize the Bird</h2>
+        <p class="text-center">
+          Share your bird sound recordings and let our advanced recognition
+          technology identify the bird species.
+        </p>
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="upload-container p-5 text-center">
+              <!-- Remove method="POST" and type="submit" -->
+              <div class="form-group">
+                <label for="fileInput" class="form-label"
+                  >Choose an audio file:</label
+                >
+                <input
+                  type="file"
+                  class="form-control form-control-lg"
+                  id="fileInput"
+                  name="fileInput"
+                  accept="audio/*"
+                  required
+                />
+              </div>
+              <!-- Change to a regular button, not part of a form -->
+              <button
+                type="button"
+                id="uploadButton"
+                class="btn btn-success btn-lg btn-block"
+              >
+                Upload Recording
+              </button>
 
               <!-- Loading spinner -->
               <div id="loading" style="display: none; margin-top: 20px">
@@ -271,7 +333,6 @@
           </div>
         </div>
       </div>
-
       <hr />
       <!-- Get In Touch Now Section -->
       <div class="row mb-4">
@@ -421,100 +482,122 @@
         </ul>
       </div>
     </footer>
+    <script>
+      window.addEventListener("beforeunload", function (event) {
+        event.preventDefault();
+      });
+    </script>
     <!-- Bootstrap core JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+    <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+    <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // Floating button functionality
         const floatBtn = document.querySelector(".float-btn");
         const uploadSection = document.querySelector("#upload-section");
 
-        // Observer to hide/show the button based on the section's visibility
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              floatBtn.style.display = "none";
-            } else {
-              floatBtn.style.display = "block";
+        if (floatBtn && uploadSection) {
+          // Observer to hide/show the button based on the section's visibility
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                floatBtn.style.display = "none";
+              } else {
+                floatBtn.style.display = "block";
+              }
+            });
+          });
+
+          observer.observe(uploadSection);
+
+          // Smooth scroll to the section when the button is clicked
+          floatBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            uploadSection.scrollIntoView({ behavior: "smooth" });
+          });
+        }
+
+        // Initialize tooltips
+        if (typeof $.fn.tooltip === "function") {
+          $('[data-toggle="tooltip"]').tooltip();
+        }
+
+        // File upload handling
+        const uploadButton = document.getElementById("uploadButton");
+        if (uploadButton) {
+          uploadButton.addEventListener("click", async function (event) {
+            event.preventDefault();
+            console.log("🛑 Upload button clicked!");
+
+            const fileInput = document.getElementById("fileInput");
+            const loadingSpinner = document.getElementById("loading");
+            const resultDiv = document.getElementById("result");
+            const errorDiv = document.getElementById("error");
+            const birdName = document.getElementById("birdName");
+            const birdInfo = document.getElementById("birdInfo");
+            const birdImage = document.getElementById("birdImage");
+
+            if (!fileInput || fileInput.files.length === 0) {
+              console.log("⚠️ No file selected!");
+              alert("Please select an audio file!");
+              return;
+            }
+
+            console.log("✅ File selected:", fileInput.files[0]);
+
+            const formData = new FormData();
+            formData.append("fileInput", fileInput.files[0]);
+
+            // Show loading spinner
+            if (loadingSpinner) loadingSpinner.style.display = "block";
+            if (resultDiv) resultDiv.style.display = "none";
+            if (errorDiv) errorDiv.style.display = "none";
+
+            try {
+              const response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                body: formData,
+              });
+
+              const data = await response.json();
+
+              // Hide spinner
+              if (loadingSpinner) loadingSpinner.style.display = "none";
+
+              if (response.ok) {
+                console.log("✅ Bird species detected:", data);
+                if (birdName)
+                  birdName.textContent = data.bird_species || "Unknown Bird";
+                if (birdInfo)
+                  birdInfo.textContent =
+                    data.description || "No additional information.";
+                if (birdImage) {
+                  birdImage.src = data.image_url || "images/default-bird.jpg";
+                  birdImage.alt = data.bird_species || "Bird Image";
+                }
+                if (resultDiv) resultDiv.style.display = "block";
+              } else {
+                console.log("❌ Error:", data.error);
+                if (errorDiv) {
+                  errorDiv.textContent =
+                    data.error || "Failed to recognize the bird.";
+                  errorDiv.style.display = "block";
+                }
+              }
+            } catch (error) {
+              console.log("🚨 Fetch Error:", error);
+              if (loadingSpinner) loadingSpinner.style.display = "none";
+              if (errorDiv) {
+                errorDiv.textContent =
+                  "An error occurred while processing the audio.";
+                errorDiv.style.display = "block";
+              }
             }
           });
-        });
-
-        observer.observe(uploadSection);
-
-        // Smooth scroll to the section when the button is clicked
-        floatBtn.addEventListener("click", function (e) {
-          e.preventDefault();
-          uploadSection.scrollIntoView({ behavior: "smooth" });
-        });
+        }
       });
-      $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-      });
-    </script>
-
-    <script>
-      document
-        .getElementById("uploadForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault(); // Prevent page reload
-
-          const formData = new FormData();
-          const fileInput = document.getElementById("fileInput");
-          const loadingSpinner = document.getElementById("loading");
-          const resultDiv = document.getElementById("result");
-          const errorDiv = document.getElementById("error");
-          const birdName = document.getElementById("birdName");
-          const birdInfo = document.getElementById("birdInfo");
-          const birdImage = document.getElementById("birdImage");
-
-          if (fileInput.files.length === 0) {
-            alert("Please select an audio file!");
-            return;
-          }
-
-          //formData.append("file", fileInput.files[0]);
-
-          formData.append("birdAudio", fileInput.files[0]); // ✅ Correct key and file
-          const file = fileInput.files[0]; // ✅ Ensure this gets the first file
-
-          // Show loading spinner
-          loadingSpinner.style.display = "block";
-          resultDiv.style.display = "none";
-          errorDiv.style.display = "none";
-
-          try {
-            const response = await fetch("http://127.0.0.1:5000/predict", {
-              method: "POST",
-              body: formData,
-            });
-
-            const data = await response.json();
-
-            // Hide spinner
-            loadingSpinner.style.display = "none";
-
-            if (response.ok) {
-              // Show prediction result
-              birdName.textContent = data.bird_species || "Unknown Bird";
-              birdInfo.textContent =
-                data.description || "No additional information available.";
-              birdImage.src = data.image_url || "images/default-bird.jpg";
-              birdImage.alt = data.bird_species || "Bird Image";
-              resultDiv.style.display = "block";
-            } else {
-              errorDiv.textContent =
-                data.error || "Failed to recognize the bird.";
-              errorDiv.style.display = "block";
-            }
-          } catch (error) {
-            loadingSpinner.style.display = "none";
-            errorDiv.textContent =
-              "An error occurred while processing the audio.";
-            errorDiv.style.display = "block";
-          }
-        });
     </script>
   </body>
 </html>
