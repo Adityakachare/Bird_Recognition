@@ -266,8 +266,6 @@
           </div>
         </div>
       </div> -->
-
-      <!-- The upload form section -->
       <!-- The upload form section -->
       <div id="upload-section" class="upload-audio-section my-5">
         <h2 class="text-center">Upload Your Recording to Recognize the Bird</h2>
@@ -482,9 +480,21 @@
         </ul>
       </div>
     </footer>
+
     <script>
-      window.addEventListener("beforeunload", function (event) {
-        event.preventDefault();
+      let isUploading = false;
+
+      document.getElementById("uploadButton").addEventListener("click", () => {
+        isUploading = true;
+        console.log("🚀 Upload started... preventing reload.");
+      });
+
+      window.addEventListener("beforeunload", (event) => {
+        if (isUploading) {
+          event.preventDefault();
+          event.returnValue =
+            "An upload is still in progress. Are you sure you want to leave?";
+        }
       });
     </script>
     <!-- Bootstrap core JavaScript -->
@@ -559,6 +569,7 @@
               const response = await fetch("http://127.0.0.1:5000/predict", {
                 method: "POST",
                 body: formData,
+                cache: "no-cache",
               });
 
               const data = await response.json();
@@ -598,6 +609,7 @@
           });
         }
       });
+      console.log("🔍 Raw API response:", data);
     </script>
   </body>
 </html>
